@@ -13,24 +13,24 @@
 
 (defn apply
   "Returns Column based on column name"
-  [^DataFrame df column-name]
+  [^DataFrame df ^String column-name]
   (.apply df column-name))
 
 (defn as
   "Returns a new dataframe with an alias"
-  [df alias]
+  [^DataFrame df ^String alias]
   (.as df alias))
 
 (def cache (memfn cache))
 
 (defn col
   "Return the column with this name"
-  [df col-name]
+  [^DataFrame df ^String col-name]
   (.col df col-name))
 
 (defn collect
   "Return a list of all the Rows"
-  [df]
+  [^DataFrame df]
   (list (.collectAsList df)))
 
 (defn columns
@@ -50,7 +50,7 @@
 
 (defn except
   "Return the difference of this DataFrame and another"
-  [df other]
+  [^DataFrame df ^DataFrame other]
   (.except df other))
 
 (defn explain
