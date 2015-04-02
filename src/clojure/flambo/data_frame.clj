@@ -8,13 +8,13 @@
 
 (defn agg
   "Aggregate the entire dataframe without groups."
-  ([df exprs]
+  ([^DataFrame df exprs]
    (.agg df exprs))
   ([df ^Column expr exprs]))
 
 (defn apply
   "Returns Column based on column name"
-  [df column-name]
+  [^DataFrame df column-name]
   (.apply df column-name))
 
 (defn as
@@ -53,19 +53,19 @@
 
 (defn explain
   "Print the physical and optional logical plan to the console for debugging"
-  ([df]
+  ([^DataFrame df]
    (.explain df))
-  ([df extended]
+  ([^DataFrame df extended]
    (.explain df extended)))
 
 (defn filter
   "Filters rows using the given SQL expression."
-  [df condition-expr]
+  [^DataFrame df condition-expr]
   (.filter df condition-expr))
 
 (defn group-by
   "Groups the dataframe by the specified column names"
-  [df column & columns]
+  [^DataFrame df ^Column column & columns]
   (.groupBy df column columns))
 
 (defn head
@@ -98,7 +98,7 @@
 
 (defn sort
   "Returns a new DataFrame sorted by the specified column."
-  [df sort-col]
+  [^DataFrame df sort-col]
   (.sort df sort-col))
 
 (def print-schema
@@ -113,28 +113,28 @@
 
 (defn sample
   "Returns a new DataFrame by sampling a fraction of rows, optionally using a random seed."
-  ([data-frame with-replacement fraction]
-   (.sample data-frame with-replacement fraction))
-  ([data-frame with-replacement fraction seed]
+  ([^DataFrame df with-replacement fraction]
+   (.sample df with-replacement fraction))
+  ([^DataFrame df with-replacement fraction seed]
    (.sample data-frame with-replacement fraction seed)))
 
 (defn show
   "Displays the top 20 rows of data-frame in a tabular form"
-  ([data-frame]
+  ([^DataFrame df]
    (.show data-frame))
-  ([data-frame n]
+  ([^DataFrame df n]
    (.show data-frame n)))
 
 (defn take
   "Returns the first n rows in data-frame"
-  [data-frame n]
-  (.take data-frame n))
+  [^DataFrame df n]
+  (.take df n))
 
 (defn to-df
   "Returns the DataFrame, optionally with columns renamed."
-  ([df]
+  ([^DataFrame df]
     (.toDF df))
-  ([df column-names]
+  ([^DataFrame df column-names]
     (.toDF df column-names)))
 
 (def to-java-rdd (memfn toJavaRDD))
@@ -143,7 +143,7 @@
 
 (defn union-all
   "Return a new DataFrame with the union of rows of these DataFrames"
-  [df other]
+  [^DataFrame df other]
   (.unionAll df other))
 
 ;; ## Row
