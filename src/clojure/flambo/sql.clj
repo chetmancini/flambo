@@ -1,6 +1,7 @@
 ;; ## EXPERIMENTAL
 ;;
 ;; This code as well as SparkSQL itself are considered experimental.
+;; See data_frame.clj for dataframe operations.
 ;;
 (ns flambo.sql
   (:require [flambo.api :as f :refer [defsparkfn]])

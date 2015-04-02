@@ -1,16 +1,33 @@
-(ns flambo.sql
+(ns flambo.data-frame
   (:require [flambo.api :as f :refer [defsparkfn untuple]])
-  (:import [org.apache.spark.sql SQLContext DataFrame Row]))
+  (:import [org.apache.spark.sql SQLContext DataFrame Row Column]))
 
 
 ;; ## DataFrame
 ;;
+
+(defn agg
+  "Aggregate the entire dataframe without groups."
+  ([df exprs]
+   (.agg df exprs))
+  ([df ^Column expr exprs]))
+
 (defn apply
   "Returns Column based on column name"
   [df column-name]
   (.apply df column-name))
 
+(defn as
+  "Returns a new dataframe with an alias"
+  [df alias]
+  (.as df alias))
+
 (def cache (memfn cache))
+
+(defn col
+  "Return the column with this name"
+  [df col-name]
+  (.col df col-name))
 
 (defn collect
   "Return a list of all the Rows"
@@ -34,10 +51,55 @@
   [df other]
   (.except df other))
 
+(defn explain
+  "Print the physical and optional logical plan to the console for debugging"
+  ([df]
+   (.explain df))
+  ([df extended]
+   (.explain df extended)))
+
+(defn filter
+  "Filters rows using the given SQL expression."
+  [df condition-expr]
+  (.filter df condition-expr))
+
+(defn group-by
+  "Groups the dataframe by the specified column names"
+  [df column & columns]
+  (.groupBy df column columns))
+
+(defn head
+  "Return the first n rows"
+  ([df]
+   (.head df))
+  ([df n]
+   (.head df n))))
+
+
+(defn intersect
+  "Return a dataframe with rows that only belong in this and the other dataframe."
+  [df other]
+  (.intersect df other))
+
+(defn join
+  "Cartesian join with another df"
+  ([^DataFrame df ^DataFrame right]
+   (.join df right))
+  ([^DataFrame df ^DataFrame right ^Column join-exprs]
+   (.join df right join-exprs))
+  ([^DataFrame df ^DataFrame right ^Column join-exprs join-type]
+   {:pre [(contains? #{:inner :outer :left_outer :right_outer :semijoin} join-type)]}
+   (.join df right join-exprs (str join-type))))
+
 (defn register-temp-table
   "Registers this DataFrame as a temp table with the given name"
   [df table-name]
   (.registerTempTable df table-name))
+
+(defn sort
+  "Returns a new DataFrame sorted by the specified column."
+  [df sort-col]
+  (.sort df sort-col))
 
 (def print-schema
   "Prints the schema to the console in a nice tree format."
