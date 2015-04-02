@@ -5,7 +5,6 @@
 
 ;; ## DataFrame
 ;;
-
 (defn agg
   "Aggregate the entire dataframe without groups."
   ([^DataFrame df exprs]
@@ -34,17 +33,20 @@
   [df]
   (list (.collectAsList df)))
 
-(def columns
+(defn columns
   "Returns all column names as a vector."
-  [df]
+  [^DataFrame df]
   (vec (.columns df)))
 
-(def count (memfn count))
+(def count
+  "Return number of rows in DataFrame"
+  [^DataFrame df]
+  (.count df))
 
 (defn dtypes
   "Return a list of column names and their data types"
-  [df]
-  (map f/untuple (.dtypes df))
+  [^DataFrame df]
+  (map f/untuple (list (.dtypes df)))
 
 (defn except
   "Return the difference of this DataFrame and another"
