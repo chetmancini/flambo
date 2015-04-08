@@ -38,15 +38,15 @@
   [^DataFrame df]
   (vec (.columns df)))
 
-(def count
+(defn count
   "Return number of rows in DataFrame"
   [^DataFrame df]
   (.count df))
 
-(defn dtypes
-  "Return a list of column names and their data types"
-  [^DataFrame df]
-  (map f/untuple (list (.dtypes df)))
+;(defn dtypes
+;  "Return a list of column names and their data types"
+;  [^DataFrame df]
+;  (map f/untuple (list (.dtypes df)))
 
 (defn except
   "Return the difference of this DataFrame and another"
@@ -75,7 +75,7 @@
   ([df]
    (.head df))
   ([df n]
-   (.head df n))))
+   (.head df n)))
 
 
 (defn intersect
@@ -103,12 +103,12 @@
   [^DataFrame df sort-col]
   (.sort df sort-col))
 
-(def print-schema
+(defn print-schema
   "Prints the schema to the console in a nice tree format."
   [df]
   (.printSchema df))
 
-(def rdd
+(defn rdd
   "Return the content of the DataFrame as an RDD of Rows."
   [df]
   (.rdd df))
@@ -118,14 +118,14 @@
   ([^DataFrame df with-replacement fraction]
    (.sample df with-replacement fraction))
   ([^DataFrame df with-replacement fraction seed]
-   (.sample data-frame with-replacement fraction seed)))
+   (.sample df with-replacement fraction seed)))
 
 (defn show
   "Displays the top 20 rows of data-frame in a tabular form"
   ([^DataFrame df]
-   (.show data-frame))
+   (.show df))
   ([^DataFrame df n]
-   (.show data-frame n)))
+   (.show df n)))
 
 (defn take
   "Returns the first n rows in data-frame"
