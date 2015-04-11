@@ -31,7 +31,7 @@
 (defn collect
   "Return a list of all the Rows"
   [^DataFrame df]
-  (list (.collectAsList df)))
+  (.collectAsList df))
 
 (defn columns
   "Returns all column names as a vector."
@@ -55,8 +55,8 @@
 
 (defn explain
   "Print the physical and optional logical plan to the console for debugging"
-  ([^DataFrame df]
-   (.explain df))
+  ([col-or-df]
+   (.explain col-or-df))
   ([^DataFrame df extended]
    (.explain df extended)))
 
@@ -156,3 +156,20 @@
       (if (< i n)
         (recur (inc i) (conj! v (.get row i)))
         (persistent! v)))))
+
+;; ## Column
+;;
+(defn is-not-null?
+  "SQL is-not-null. Returns a Column"
+  [^Column col]
+  (.isNotNull col))
+
+(defn is-null?
+  "SQL is-null. Returns a Column"
+  [^Column col]
+  (.isNull col))
+
+(defn starts-with?
+  "SQL starts with. Returns another Column. Second param can be string or a Column"
+  [^Column col other]
+  (.startsWith col other))
