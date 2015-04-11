@@ -11,7 +11,7 @@
    (.agg df exprs))
   ([df ^Column expr exprs]))
 
-(defn apply
+(defn apply-column
   "Returns Column based on column name"
   [^DataFrame df ^String column-name]
   (.apply df column-name))
@@ -43,10 +43,15 @@
   [^DataFrame df]
   (.count df))
 
-;(defn dtypes
-;  "Return a list of column names and their data types"
-;  [^DataFrame df]
-;  (map f/untuple (list (.dtypes df)))
+(defn distinct
+  "Return a new dataframe with distinct values"
+  [^DataFrame df]
+  (.distinct df))
+
+(defn dtypes
+  "Return a list of column names and their data types"
+  [^DataFrame df]
+  (map f/untuple (.dtypes df)))
 
 (defn except
   "Return the difference of this DataFrame and another"
@@ -65,6 +70,13 @@
   [^DataFrame df condition-expr]
   (.filter df condition-expr))
 
+(defn first
+  "Alias for head"
+  ([^DataFrame df]
+   (.first df))
+  ([^DataFrame df n]
+   (.first df n)))
+
 (defn group-by
   "Groups the dataframe by the specified column names"
   [^DataFrame df ^Column column & columns]
@@ -72,11 +84,10 @@
 
 (defn head
   "Return the first n rows"
-  ([df]
+  ([^DataFrame df]
    (.head df))
-  ([df n]
+  ([^DataFrame df n]
    (.head df n)))
-
 
 (defn intersect
   "Return a dataframe with rows that only belong in this and the other dataframe."
@@ -98,10 +109,10 @@
   [df table-name]
   (.registerTempTable df table-name))
 
-(defn sort
-  "Returns a new DataFrame sorted by the specified column."
-  [^DataFrame df sort-col]
-  (.sort df sort-col))
+;(defn sort
+;  "Returns a new DataFrame sorted by the specified column."
+;  [^DataFrame df sort-col]
+;  (.sort df sort-col []))
 
 (defn print-schema
   "Prints the schema to the console in a nice tree format."
@@ -132,12 +143,16 @@
   [^DataFrame df n]
   (.take df n))
 
-(defn to-df
-  "Returns the DataFrame, optionally with columns renamed."
-  ([^DataFrame df]
-    (.toDF df))
-  ([^DataFrame df column-names]
-    (.toDF df column-names)))
+;(defn to-df
+;  "Returns the DataFrame, optionally with columns renamed."
+;    ([^DataFrame df]
+;      (.toDF df))
+;    ([^DataFrame df & cols]
+;     (.toDF df [cols])))
+;     ;(apply (memfn toDF %1) df col cols)))
+;      ;(let [to-df (memfn toDF)
+;      ;      helper (partial to-df df)]
+;      ;  (apply helper column-names))))
 
 (def to-java-rdd (memfn toJavaRDD))
 
