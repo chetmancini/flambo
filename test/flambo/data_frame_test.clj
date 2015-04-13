@@ -62,6 +62,10 @@
           (type (df/rdd test-df)) => MapPartitionsRDD)
         (fact "sample"
           (df/sample test-df true 1.0))
+        (fact "Select"
+          (parse-row (df/select test-df ["col1"])) => [4])
+        (fact "Select Exprs"
+          (parse-row (df/select-expr test-df ["col1 + 10"])) => [14])
         (fact "show"
           (df/show test-df))
         (fact "take returns a Row[] of the first n rows"
@@ -73,4 +77,5 @@
         (fact "to-json"
           (f/first (df/to-json test-df)) => "{\"col1\":4,\"col2\":\"a\"}")
         (fact "union all"
-          (df/count (df/union-all test-df test-df-2)) => 6)))))
+          (df/count (df/union-all test-df test-df-2)) => 6)
+        ))))

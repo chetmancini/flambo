@@ -130,6 +130,14 @@
   ([^DataFrame df with-replacement ^double fraction ^long seed]
    (.sample df with-replacement fraction seed)))
 
+(defn select
+  [^DataFrame df columns]
+  (.select df (into-array String columns)))
+
+(defn select-expr
+  [^DataFrame df exprs]
+  (.selectExpr df (into-array String exprs)))
+
 (defn show
   "Displays the top 20 rows of data-frame in a tabular form"
   ([^DataFrame df]
