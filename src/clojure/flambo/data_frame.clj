@@ -1,6 +1,6 @@
 (ns flambo.data-frame
   (:require [flambo.api :as f :refer [defsparkfn untuple]])
-  (:import [org.apache.spark.sql SQLContext DataFrame Row Column]))
+  (:import [org.apache.spark.sql SQLContext DataFrame Row Column GroupedData]))
 
 
 ;; ## DataFrame
@@ -39,9 +39,9 @@
   (vec (.columns df)))
 
 (defn count
-  "Return number of rows in DataFrame"
-  [^DataFrame df]
-  (.count df))
+  "Return number of rows in DataFrame or GroupedData Aggregation"
+  [df-or-gd]
+  (.count df-or-gd))
 
 (defn distinct
   "Return a new dataframe with distinct values"
@@ -79,8 +79,8 @@
 
 (defn group-by
   "Groups the dataframe by the specified column names"
-  [^DataFrame df ^Column column & columns]
-  (.groupBy df column columns))
+  [^DataFrame df column]
+  (.groupBy df column (into-array String [])))
 
 (defn head
   "Return the first n rows"
@@ -158,6 +158,51 @@
   "Return a new DataFrame with the union of rows of these DataFrames"
   [^DataFrame df other]
   (.unionAll df other))
+
+;; ##GroupedData
+;;
+(defn agg
+  "Compute aggregates by specifying a map from column name to aggregate methods.
+  entries must be 'table_name'=>['avg'|'count'|'max'|'mean'|'min'|'sum']"
+  [^GroupedData gd exprs]
+  (.agg gd exprs))
+
+(defn avg
+  "Compute the mean value for each numeric columns for each group."
+  ([^GroupedData gd]
+    (.avg gd (into-array String [])))
+  ([^GroupedData gd column-names]
+    (.avg gd (into-array String column-names))))
+
+;;see Count under DataFrame Section
+
+(defn max
+  "Compute the max value for each numeric columns for each group."
+  ([^GroupedData gd]
+   (.max gd (into-array String [])))
+  ([^GroupedData gd column-names]
+   (.max gd (into-array String column-names))))
+
+(defn mean
+  "Compute the average value for each numeric columns for each group."
+  ([^GroupedData gd]
+   (.mean gd (into-array String [])))
+  ([^GroupedData gd column-names]
+   (.mean gd (into-array String column-names))))
+
+(defn min
+  "Compute the min value for each numeric column for each group."
+  ([^GroupedData gd]
+   (.min gd (into-array String [])))
+  ([^GroupedData gd column-names]
+   (.min gd (into-array String column-names))))
+
+(defn sum
+  "Compute the sum for each numeric columns for each group."
+  ([^GroupedData gd]
+   (.sum gd (into-array String [])))
+  ([^GroupedData gd column-names]
+   (.sum gd (into-array String column-names))))
 
 ;; ## Row
 ;;

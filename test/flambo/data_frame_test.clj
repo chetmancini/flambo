@@ -4,7 +4,7 @@
             [flambo.sql :as sql]
             [flambo.data-frame :as df]
             [flambo.conf :as conf])
-  (:import [org.apache.spark.sql SQLContext DataFrame Row Column]
+  (:import [org.apache.spark.sql SQLContext DataFrame Row Column GroupedData]
            [org.apache.spark.rdd MapPartitionsRDD]
            [org.apache.spark.api.java JavaRDD]))
 
@@ -36,11 +36,14 @@
           (df/dtypes test-df) => [["col1" "LongType"] ["col2" "StringType"]])
         (fact "except returns the difference of two dataframes"
           (df/row->vec (first (df/collect (df/except test-df test-df-2)))) => [5 "b"])
-        (fact "explain works"
+        (fact "explain can be invoked"
           (df/explain test-df))
         (fact "filter"
           (df/count (df/filter test-df "col2 = \"a\"")) => 2)
-        (fact "group-by")
+        (fact "group-by avg"
+          (df/row->vec (df/head (df/avg (df/group-by test-df "col2")))) => ["a" 5.0])
+        (fact "group-by sum"
+          (df/row->vec (df/head (df/sum (df/group-by test-df "col2")))) => ["a" 10])
         (fact "head returns the first row"
           (df/row->vec (df/head test-df)) => [4 "a"])
         (fact "intersect"
