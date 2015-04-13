@@ -125,9 +125,9 @@
 
 (defn sample
   "Returns a new DataFrame by sampling a fraction of rows, optionally using a random seed."
-  ([^DataFrame df with-replacement fraction]
+  ([^DataFrame df with-replacement ^double fraction]
    (.sample df with-replacement fraction))
-  ([^DataFrame df with-replacement fraction seed]
+  ([^DataFrame df with-replacement ^double fraction ^long seed]
    (.sample df with-replacement fraction seed)))
 
 (defn show
@@ -144,10 +144,10 @@
 
 (defn to-df
   "Returns the DataFrame, optionally with columns renamed."
-    ([^DataFrame df]
-      (.toDF df))
-    ([^DataFrame df cols]
-     (.toDF df (into-array String cols))))
+  ([^DataFrame df]
+    (.toDF df))
+  ([^DataFrame df cols]
+   (.toDF df (into-array String cols))))
 
 (def to-java-rdd (memfn toJavaRDD))
 
@@ -214,17 +214,109 @@
 
 ;; ## Column
 ;;
-(defn is-not-null?
+(defn ^Column and?
+  [^Column col ^Column other]
+  (.and col other))
+
+(defn ^Column asc
+  [^Column col]
+  (.asc col))
+
+(defn ^Column desc
+  [^Column col]
+  (.desc col))
+
+(defn ^Column divide
+  [^Column col other]
+  (.divide col other))
+
+(defn ^Column ends-with?
+  [^Column col col-or-str-other]
+  (.endsWith col col-or-str-other))
+
+(defn ^Column equal-to-null-safe?
+  [^Column col other]
+  (.eqNullSafe col other))
+
+(defn ^Column equal-to?
+  [^Column col other]
+  (.equalTo col other))
+
+(defn ^Column greater-or-equal-to?
+  [^Column col other]
+  (.geq col other))
+
+(defn ^Column get-field
+  [^Column col other]
+  (.getField col other))
+
+(defn ^Column get-item
+  [^Column col ordinal]
+  (.getItem col ordinal))
+
+(defn ^Column greater-than
+  [^Column col other]
+  (.gt col other))
+
+(defn ^Column in?
+  [^Column col column-list]
+  (.in col (into-array Column column-list)))
+
+(defn ^Column is-not-null?
   "SQL is-not-null. Returns a Column"
   [^Column col]
   (.isNotNull col))
 
-(defn is-null?
+(defn ^Column is-null?
   "SQL is-null. Returns a Column"
   [^Column col]
   (.isNull col))
 
-(defn starts-with?
+(defn ^Column less-or-equal-to?
+  [^Column col other]
+  (.leq col other))
+
+(defn ^Column like?
+  [^Column col ^String literal]
+  (.like col literal))
+
+(defn ^Column less-than?
+  [^Column col other]
+  (.lt col other))
+
+(defn ^Column minus
+  [^Column col other]
+  (.minus col other))
+
+(defn ^Column mod
+  [^Column col other]
+  (.mod col other))
+
+(defn ^Column multiply
+  [^Column col other]
+  (.multiply col other))
+
+(defn ^Column not-equal-to?
+  [^Column col other]
+  (.notEqual col other))
+
+(defn ^Column or?
+  [^Column col other]
+  (.or col other))
+
+(defn ^Column plus
+  [^Column col other]
+  (.plus col other))
+
+(defn ^Column rlike?
+  [^Column col ^String literal]
+  (.rlike col literal))
+
+(defn ^Column starts-with?
   "SQL starts with. Returns another Column. Second param can be string or a Column"
   [^Column col other]
   (.startsWith col other))
+
+(defn ^Column substr
+  [^Column col start-pos len]
+  (.substr col start-pos len))

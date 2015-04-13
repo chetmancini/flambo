@@ -65,7 +65,7 @@
         (fact "show"
           (df/show test-df))
         (fact "take returns a Row[] of the first n rows"
-          (count (df/take test-df 1)) => 1)
+          (count (df/take test-df 2)) => 2)
         (fact "to-df"
           (df/columns (df/to-df test-df ["cola" "colb"])) => ["cola" "colb"])
         (fact "to-java-rdd"
