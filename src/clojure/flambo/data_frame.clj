@@ -143,16 +143,12 @@
   [^DataFrame df n]
   (.take df n))
 
-;(defn to-df
-;  "Returns the DataFrame, optionally with columns renamed."
-;    ([^DataFrame df]
-;      (.toDF df))
-;    ([^DataFrame df & cols]
-;     (.toDF df [cols])))
-;     ;(apply (memfn toDF %1) df col cols)))
-;      ;(let [to-df (memfn toDF)
-;      ;      helper (partial to-df df)]
-;      ;  (apply helper column-names))))
+(defn to-df
+  "Returns the DataFrame, optionally with columns renamed."
+    ([^DataFrame df]
+      (.toDF df))
+    ([^DataFrame df cols]
+     (.toDF df (into-array String cols))))
 
 (def to-java-rdd (memfn toJavaRDD))
 
