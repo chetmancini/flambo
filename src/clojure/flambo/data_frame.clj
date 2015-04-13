@@ -1,6 +1,6 @@
 (ns flambo.data-frame
   (:require [flambo.api :as f :refer [defsparkfn untuple]])
-  (:import [org.apache.spark.sql SQLContext DataFrame Row Column GroupedData]))
+  (:import [org.apache.spark.sql DataFrame Row Column GroupedData]))
 
 
 ;; ## DataFrame
@@ -8,8 +8,7 @@
 (defn agg
   "Aggregate the entire dataframe without groups."
   ([^DataFrame df exprs]
-   (.agg df exprs))
-  ([df ^Column expr exprs]))
+   (.agg df exprs)))
 
 (defn apply-column
   "Returns Column based on column name"

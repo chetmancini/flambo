@@ -4,12 +4,12 @@
             [flambo.sql :as sql]
             [flambo.data-frame :as df]
             [flambo.conf :as conf])
-  (:import [org.apache.spark.sql SQLContext DataFrame Row Column GroupedData]
+  (:import [org.apache.spark.sql DataFrame Column]
            [org.apache.spark.rdd MapPartitionsRDD]
            [org.apache.spark.api.java JavaRDD]))
 
 (facts
-  "about data frames"
+  "All major Java DataFrame functions are supported."
   (let [conf (-> (conf/spark-conf)
                  (conf/master "local[*]")
                  (conf/app-name "api-test"))]
@@ -18,8 +18,10 @@
             test-data ["{\"col1\":4,\"col2\":\"a\"}" "{\"col1\":6,\"col2\":\"a\"}" "{\"col1\":5,\"col2\":\"b\"}"]
             test-df (sql/json-rdd sql-context (f/parallelize c test-data))
             test-data-2 ["{\"col1\":4,\"col2\":\"a\"}" "{\"col1\":4,\"col2\":\"a\"}" "{\"col1\":6,\"col2\":\"a\"}"]
-            test-df-2 (sql/json-rdd sql-context (f/parallelize c test-data-2))]
-        (fact "aggregate the dataframe")
+            test-df-2 (sql/json-rdd sql-context (f/parallelize c test-data-2))
+            parse-row (fn [data] (df/row->vec (df/first data)))]
+        (fact "aggregate the dataframe"
+          (parse-row (df/agg test-df {"col1" "sum"})) => [15])
         (fact "apply returns a column"
           (type (df/apply-column test-df "col1")) => Column)
         (fact "as returns dataframe with an alias"
@@ -35,15 +37,15 @@
         (fact "dtypes returns the datatypes"
           (df/dtypes test-df) => [["col1" "LongType"] ["col2" "StringType"]])
         (fact "except returns the difference of two dataframes"
-          (df/row->vec (first (df/collect (df/except test-df test-df-2)))) => [5 "b"])
+          (parse-row (df/except test-df test-df-2)) => [5 "b"])
         (fact "explain can be invoked"
           (df/explain test-df))
         (fact "filter"
           (df/count (df/filter test-df "col2 = \"a\"")) => 2)
         (fact "group-by avg"
-          (df/row->vec (df/head (df/avg (df/group-by test-df "col2")))) => ["a" 5.0])
+          (parse-row (df/avg (df/group-by test-df "col2"))) => ["a" 5.0])
         (fact "group-by sum"
-          (df/row->vec (df/head (df/sum (df/group-by test-df "col2")))) => ["a" 10])
+          (parse-row (df/sum (df/group-by test-df "col2"))) => ["a" 10])
         (fact "head returns the first row"
           (df/row->vec (df/head test-df)) => [4 "a"])
         (fact "intersect"
