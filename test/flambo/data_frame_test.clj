@@ -49,8 +49,8 @@
           (df/count (df/join test-df test-df-2)) => 9)
         (fact "register as temp table works"
           (df/register-temp-table test-df "test-table-name"))
-        ;(fact "sort"
-        ;  (df/row->vec (last (df/collect (df/sort test-df "col1")))) => [6 "a"])
+        (fact "sort the dataframe"
+          (df/row->vec (last (df/collect (df/sort test-df "col1")))) => [6 "a"])
         (fact "print schema works"
           (df/print-schema test-df))
         (fact "rdd returns an rdd"

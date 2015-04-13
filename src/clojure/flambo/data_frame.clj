@@ -109,10 +109,10 @@
   [df table-name]
   (.registerTempTable df table-name))
 
-;(defn sort
-;  "Returns a new DataFrame sorted by the specified column."
-;  [^DataFrame df sort-col]
-;  (.sort df sort-col []))
+(defn sort
+  "Returns a new DataFrame sorted by the specified column."
+  [^DataFrame df ^String sort-col]
+  (.sort df sort-col (into-array String [])))
 
 (defn print-schema
   "Prints the schema to the console in a nice tree format."
